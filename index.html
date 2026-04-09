@@ -1,0 +1,1284 @@
+<!-- Calculateur Objectif Financier — MoneyRadar -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* ===== CALCULATEUR OBJECTIF FINANCIER ===== */
+.mric-calc {
+  --teal:#00F5C0;--teal-dim:rgba(0,245,192,0.08);--teal-b:rgba(0,245,192,0.3);
+  --blue:#1060C4;
+  --navy:#0B1120;--navy2:#131F35;--navy3:#1A2847;
+  --light:#F4F7FF;--light2:#EAF0FF;
+  --lt:#1A2847;--lsub:#1A2847;--lborder:#D0DCEF;
+  --dsub:#fff;--dborder:rgba(255,255,255,0.07);
+  --green:#00F5C0;--red:#FF3B4E;
+  --pattern-svg:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300F5C0' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  --glass:rgba(255,255,255,0.03);
+  --glass-border:rgba(255,255,255,0.08);
+  --glow:0 0 80px rgba(0,245,192,0.08);
+  width:100%;max-width:100%;box-sizing:border-box;overflow-x:hidden;
+}
+.mric-calc *,.mric-calc *::before,.mric-calc *::after{box-sizing:border-box}
+
+.mric-calc .inn{max-width:760px;margin:0 auto;padding:80px 24px}
+.mric-calc .inn-wide{max-width:1100px;margin:0 auto;padding:56px 24px}
+
+/* Sections */
+.mric-calc .dk{background:var(--navy);color:#fff;position:relative}
+.mric-calc .lt{background:var(--light);color:var(--lt);position:relative}
+
+/* Decorative mesh on dark sections */
+.mric-calc .dk::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:
+  radial-gradient(ellipse 600px 400px at 10% 20%, rgba(0,245,192,0.03) 0%, transparent 70%),
+  radial-gradient(ellipse 500px 300px at 90% 80%, rgba(16,96,196,0.04) 0%, transparent 70%);
+  pointer-events:none}
+.mric-calc .dk>*{position:relative;z-index:1}
+
+/* Labels */
+.mric-calc .lbl{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:block}
+.mric-calc .lt .lbl{color:#1A2847}
+.mric-calc .lbl::before{content:'— '}
+
+/* Titles & text */
+.mric-calc .stitle{font-size:clamp(26px,3.5vw,40px);font-weight:800;margin-bottom:20px;line-height:1.15;letter-spacing:-0.02em}
+.mric-calc .dk .stitle{color:#fff}
+.mric-calc .btxt{font-size:16px;margin-bottom:18px;line-height:1.75}
+.mric-calc .dk .btxt{color:var(--dsub)}
+.mric-calc .lt .btxt{color:var(--lsub)}
+.mric-calc .btxt strong{color:#fff}
+.mric-calc .lt .btxt strong{color:var(--lt)}
+
+/* ===== HERO ===== */
+.mric-calc .mric-hero{text-align:center;position:relative;overflow:hidden;background-image:var(--pattern-svg),radial-gradient(ellipse 75% 50% at 50% 0%,rgba(0,245,192,.28) 0%,rgba(0,245,192,.10) 40%,rgba(0,245,192,.02) 65%,transparent 80%);background-color:var(--navy)}
+.mric-calc .mric-hero>*{position:relative;z-index:1}
+.mric-calc .mric-hero-logo{display:block;margin:0 auto 28px;height:32px;width:auto}
+@keyframes mric-shimmer{0%{background-position:0% center}100%{background-position:200% center}}
+.mric-calc .mric-hero h1{font-size:clamp(30px,4.5vw,52px);font-weight:800;line-height:1.1;letter-spacing:-.03em;max-width:700px;margin:0 auto 20px;color:#fff}
+.mric-calc .mric-hero h1 em{font-style:normal;color:var(--teal)}
+.mric-calc .mric-hero-sub{font-size:clamp(15px,1.7vw,17px);color:#fff;max-width:560px;margin:0 auto;font-weight:400}
+.mric-calc .mric-hero .inn{padding-top:60px;padding-bottom:50px}
+
+/* ===== TOOL SECTION ===== */
+.mric-calc .mric-tool-section{
+  background:var(--navy2);
+  border-top:1px solid var(--glass-border);
+  border-bottom:1px solid var(--glass-border);
+  position:relative;
+}
+.mric-calc .mric-tool-section::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse 800px 600px at 30% 0%, rgba(0,245,192,0.04) 0%, transparent 70%);pointer-events:none}
+.mric-calc .mric-tool-section>*{position:relative;z-index:1}
+
+.mric-calc .mric-tool-grid{display:block}
+
+/* ===== MODE SWITCHER ===== */
+.mric-calc .mric-mode-switch{
+  display:flex;gap:0;margin-bottom:20px;
+  background:rgba(11,17,32,0.6);border:1px solid var(--glass-border);
+  border-radius:10px;overflow:hidden;
+}
+.mric-calc .mric-mode-btn{
+  flex:1;padding:12px 16px;border:none;cursor:pointer;
+  font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  background:transparent;color:var(--dsub);
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.mric-calc .mric-mode-btn.mric-active{
+  background:rgba(0,245,192,0.08);color:var(--teal);
+}
+.mric-calc .mric-mode-btn.mric-active::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--blue));
+}
+.mric-calc .mric-mode-btn:hover:not(.mric-active){color:#fff;background:rgba(255,255,255,0.03)}
+
+/* Form column */
+.mric-calc .mric-form-col{
+  padding:24px;border-radius:16px;
+  background:rgba(11,17,32,0.7);
+  border:1px solid rgba(0,245,192,0.12);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding-bottom:28px;margin-bottom:28px;
+  box-shadow:0 4px 32px rgba(0,0,0,0.25), 0 0 60px rgba(0,245,192,0.04);
+}
+.mric-calc .mric-form-col .lbl{margin-bottom:16px}
+.mric-calc .mric-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.mric-calc .mric-field label{display:block;font-size:11px;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:.04em;text-transform:uppercase}
+.mric-calc .mric-input-wrap{position:relative}
+.mric-calc .mric-input-wrap input{
+  width:100%;padding:14px 44px 14px 16px;
+  border:1px solid rgba(255,255,255,0.10);border-radius:10px;
+  background:rgba(11,17,32,0.8);color:#fff;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  box-sizing:border-box;-moz-appearance:textfield;font-size:16px;font-weight:600;
+}
+.mric-calc .mric-input-wrap input::-webkit-outer-spin-button,
+.mric-calc .mric-input-wrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.mric-calc .mric-input-wrap input:focus{
+  outline:none;border-color:var(--teal);
+  box-shadow:0 0 0 3px rgba(0,245,192,.1), 0 0 24px rgba(0,245,192,.06);
+  background:rgba(11,17,32,0.95);
+}
+.mric-calc .mric-input-suffix{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#fff;pointer-events:none;font-weight:600;font-size:13px}
+.mric-calc .mric-field-hidden{display:none}
+
+/* Preset buttons */
+.mric-calc .mric-presets{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.mric-calc .mric-preset{
+  padding:8px 14px;border-radius:8px;border:1px solid var(--glass-border);
+  background:rgba(255,255,255,0.02);color:var(--dsub);cursor:pointer;
+  font-size:12px;font-weight:600;transition:all .2s;
+}
+.mric-calc .mric-preset:hover{border-color:rgba(0,245,192,0.2);color:var(--teal);background:rgba(0,245,192,.04)}
+.mric-calc .mric-preset.mric-active{border-color:rgba(0,245,192,0.3);color:var(--teal);background:rgba(0,245,192,.08)}
+
+/* Button */
+.mric-calc .mric-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-size:15px;font-weight:700;padding:16px 24px;border-radius:10px;
+  text-decoration:none;transition:all .3s cubic-bezier(.4,0,.2,1);
+  letter-spacing:.02em;border:none;cursor:pointer;width:100%;color:#0B1120;
+  background:var(--teal);
+  box-shadow:0 4px 24px rgba(0,245,192,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+  position:relative;overflow:hidden;
+}
+.mric-calc .mric-btn::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  transition:left .5s ease;
+}
+.mric-calc .mric-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 40px rgba(0,245,192,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.mric-calc .mric-btn:hover::before{left:100%}
+.mric-calc .mric-btn:active{transform:translateY(0)}
+.mric-calc .mric-btn svg{flex-shrink:0}
+
+/* Results column */
+.mric-calc .mric-results-col{min-width:0;max-width:100%}
+.mric-calc .mric-results{display:none;max-width:100%}
+.mric-calc .mric-results.mric-visible{display:block}
+
+/* Stats row */
+.mric-calc .mric-stats-row{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:20px}
+.mric-calc .mric-stat{
+  background:rgba(11,17,32,0.6);
+  border:1px solid var(--glass-border);border-radius:14px;
+  padding:20px 16px;text-align:center;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.mric-calc .mric-stat::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(0,245,192,0.03) 0%, transparent 70%);pointer-events:none;opacity:0;
+  transition:opacity .3s}
+.mric-calc .mric-stat:hover::before{opacity:1}
+.mric-calc .mric-stat:hover{border-color:rgba(0,245,192,0.12);transform:translateY(-2px);box-shadow:var(--glow)}
+.mric-calc .mric-stat.mric-primary{border-color:rgba(0,245,192,0.15)}
+.mric-calc .mric-stat.mric-primary::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--blue),var(--teal));
+  background-size:200% auto;animation:mric-shimmer 3s linear infinite;
+}
+.mric-calc .mric-stat-num{font-size:clamp(20px,2.5vw,30px);font-weight:800;color:var(--teal);line-height:1;margin-bottom:6px;white-space:nowrap;overflow:visible}
+.mric-calc .mric-stat-num.mric-white{color:#fff;font-size:clamp(18px,2vw,24px)}
+.mric-calc .mric-stat-lbl{font-size:10px;color:#fff;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+
+/* Bar */
+.mric-calc .mric-bar-section{margin-bottom:20px}
+.mric-calc .mric-bar-track{
+  display:flex;height:32px;
+  background:rgba(11,17,32,0.6);border-radius:10px;overflow:hidden;
+  border:1px solid var(--glass-border);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,0.2);
+}
+.mric-calc .mric-bar-fill{height:100%;display:flex;align-items:center;justify-content:center;transition:width .8s cubic-bezier(.34,1.56,.64,1);overflow:hidden;min-width:0}
+.mric-calc .mric-bar-v{background:linear-gradient(90deg,#1A2847,#2A3F5C)}
+.mric-calc .mric-bar-i{background:linear-gradient(90deg,var(--teal),var(--blue));box-shadow:0 0 20px rgba(0,245,192,0.2)}
+.mric-calc .mric-bar-pct{color:#fff;font-weight:800;font-size:11px;white-space:nowrap;padding:0 8px;letter-spacing:.02em;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
+.mric-calc .mric-bar-legend{display:flex;gap:20px;margin-top:10px;flex-wrap:wrap}
+.mric-calc .mric-bar-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dsub)}
+.mric-calc .mric-bar-legend-item strong{color:#fff;font-size:13px;font-weight:700}
+.mric-calc .mric-ldot{width:8px;height:8px;border-radius:3px;flex-shrink:0}
+.mric-calc .mric-ldot-v{background:#2A3F5C}
+.mric-calc .mric-ldot-i{background:var(--teal);box-shadow:0 0 6px rgba(0,245,192,0.4)}
+
+/* Chart */
+.mric-calc .mric-chart-wrap{margin-bottom:16px}
+.mric-calc .mric-chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.mric-calc .mric-chart-title{font-weight:700;font-size:14px;color:#fff;letter-spacing:.01em}
+.mric-calc #mric-chart{
+  width:100%;border-radius:12px;
+  border:1px solid var(--glass-border);
+  background:rgba(11,17,32,0.5);
+  box-shadow:0 4px 24px rgba(0,0,0,0.15);
+}
+
+/* Summary */
+.mric-calc .qblock{
+  border-left:3px solid var(--teal);padding:18px 22px;
+  border-radius:0 12px 12px 0;margin-bottom:16px;
+  font-size:14px;font-weight:400;line-height:1.7;
+  box-shadow:0 2px 16px rgba(0,0,0,0.1);
+}
+.mric-calc .dk .qblock{background:rgba(0,245,192,0.04);color:#fff;border:1px solid rgba(0,245,192,0.08);border-left:3px solid var(--teal)}
+.mric-calc .lt .qblock{background:rgba(0,245,192,.07);color:var(--lt);border-color:#1A2847}
+.mric-calc .qblock strong{font-weight:700}
+
+/* Toggle */
+.mric-calc .mric-toggle{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 16px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);
+  border-radius:8px;color:#fff;cursor:pointer;transition:all .25s;font-weight:600;font-size:12px;
+}
+.mric-calc .mric-toggle:hover{border-color:rgba(0,245,192,0.2);color:var(--teal);background:rgba(0,245,192,.04)}
+.mric-calc .mric-chevron{transition:transform .3s}
+.mric-calc .mric-toggle.mric-open .mric-chevron{transform:rotate(180deg)}
+
+/* Table */
+.mric-calc .mric-table-full{margin-top:0;padding:0 24px 32px}
+.mric-calc .mric-table-container{display:none}
+.mric-calc .mric-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.mric-calc .mric-table{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden}
+.mric-calc .mric-table thead{background:rgba(11,17,32,0.8)}
+.mric-calc .mric-table th{padding:14px 16px;text-align:right;color:#fff;font-weight:700;white-space:nowrap;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid var(--glass-border)}
+.mric-calc .mric-table th:first-child{text-align:center}
+.mric-calc .mric-table td{padding:12px 16px;text-align:right;white-space:nowrap;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--dsub);font-weight:500}
+.mric-calc .mric-table td:first-child{text-align:center;font-weight:700;color:#fff}
+.mric-calc .mric-table td:last-child{font-weight:700;color:var(--teal)}
+.mric-calc .mric-table tbody tr{transition:all .2s}
+.mric-calc .mric-table tbody tr:hover{background:rgba(0,245,192,.03)}
+
+/* ===== Educational sections ===== */
+.mric-calc .srow{display:grid;grid-template-columns:1fr;gap:14px;margin:32px 0}
+.mric-calc .dk .scard{
+  background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);
+  border-radius:14px;padding:28px 20px;text-align:center;
+  transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
+}
+.mric-calc .dk .scard::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(0,245,192,0.04) 0%, transparent 70%);
+  opacity:0;transition:opacity .3s;pointer-events:none}
+.mric-calc .dk .scard:hover{border-color:rgba(0,245,192,0.12);transform:translateY(-3px);box-shadow:var(--glow)}
+.mric-calc .dk .scard:hover::before{opacity:1}
+
+.mric-calc .lt .scard{
+  background:#fff;border:1px solid var(--lborder);border-radius:14px;padding:28px 20px;text-align:center;
+  box-shadow:0 2px 16px rgba(0,0,0,.04);transition:all .3s cubic-bezier(.4,0,.2,1);
+}
+.mric-calc .lt .scard:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+
+.mric-calc .scard .num{font-size:clamp(26px,3vw,40px);font-weight:800;color:var(--teal);line-height:1;margin-bottom:10px}
+.mric-calc .lt .scard .num{color:#1A2847}
+.mric-calc .scard .lbl2{font-size:13px;line-height:1.5}
+.mric-calc .dk .scard .lbl2{color:var(--dsub)}
+.mric-calc .lt .scard .lbl2{color:var(--lsub)}
+
+/* Cards */
+.mric-calc .cgrid{display:grid;gap:12px;margin:28px 0}
+.mric-calc .card{
+  border-radius:14px;padding:24px 24px 24px 20px;display:flex;gap:16px;align-items:flex-start;
+  transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
+}
+.mric-calc .dk .card{background:rgba(255,255,255,0.02);border:1px solid var(--glass-border)}
+.mric-calc .dk .card:hover{border-color:rgba(0,245,192,0.12);transform:translateY(-2px);box-shadow:var(--glow)}
+.mric-calc .lt .card{background:#fff;border:1px solid var(--lborder);box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.mric-calc .lt .card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.mric-calc .cnum{font-size:36px;font-weight:800;line-height:1;flex-shrink:0;min-width:48px;margin-top:-2px}
+.mric-calc .dk .cnum{color:#00F5C0}
+.mric-calc .lt .cnum{color:#1A2847}
+.mric-calc .card h3{font-size:17px;font-weight:700;margin-bottom:5px}
+.mric-calc .dk .card h3{color:#fff}
+.mric-calc .lt .card h3{color:var(--lt)}
+.mric-calc .card p{font-size:14px;margin:0;line-height:1.65}
+.mric-calc .dk .card p{color:var(--dsub)}
+.mric-calc .lt .card p{color:var(--lsub)}
+
+/* Formula card */
+.mric-calc .mric-formula{
+  position:relative;background:rgba(11,17,32,0.7);
+  border:1px solid var(--glass-border);border-radius:14px;
+  padding:28px 28px;margin:24px 0;overflow:hidden;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.mric-calc .lt .mric-formula{background:var(--lt);border-color:var(--lt)}
+.mric-calc .mric-formula::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--blue),var(--teal));
+  background-size:200% auto;animation:mric-shimmer 4s linear infinite;
+}
+.mric-calc .mric-formula p{color:#fff;margin:0 0 8px;line-height:1.6;font-weight:500}
+.mric-calc .lt .mric-formula p{color:#fff}
+.mric-calc .mric-formula ul{padding-left:20px;margin:10px 0 0;list-style:none}
+.mric-calc .mric-formula li{color:#fff;margin-bottom:4px;font-size:14px;padding-left:16px;position:relative;line-height:1.5}
+.mric-calc .mric-formula li::before{content:'\2192';position:absolute;left:0;top:0;color:var(--teal);font-size:12px}
+.mric-calc .mric-formula li strong{color:#fff}
+
+/* FAQ */
+.mric-calc .flist{margin:24px 0;display:grid;gap:8px}
+.mric-calc .flist details{border-radius:12px;overflow:hidden;transition:all .3s}
+.mric-calc .dk .flist details{background:rgba(255,255,255,0.02);border:1px solid var(--glass-border)}
+.mric-calc .dk .flist details:hover{border-color:rgba(0,245,192,0.1)}
+.mric-calc .dk .flist details[open]{border-color:rgba(0,245,192,0.12);box-shadow:0 0 30px rgba(0,245,192,0.04)}
+.mric-calc .lt .flist details{background:#fff;border:1px solid var(--lborder)}
+.mric-calc .lt .flist details:hover{box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.mric-calc .flist summary{padding:20px 24px;cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;list-style:none;transition:color .2s}
+.mric-calc .dk .flist summary{color:#fff}
+.mric-calc .lt .flist summary{color:var(--lt)}
+.mric-calc .flist summary::-webkit-details-marker{display:none}
+.mric-calc .flist summary::after{
+  content:'+';font-size:20px;font-weight:400;color:var(--teal);
+  transition:all .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;margin-left:16px;
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;background:rgba(0,245,192,0.06);
+}
+.mric-calc .flist details[open] summary::after{transform:rotate(45deg);background:rgba(0,245,192,0.12)}
+.mric-calc .flist .fans{padding:0 24px 22px;font-size:15px;line-height:1.75}
+.mric-calc .dk .flist .fans{color:var(--dsub)}
+.mric-calc .lt .flist .fans{color:var(--lsub)}
+
+/* ===== CTA Lead Magnet ===== */
+.mric-calc .mric-lm{
+  position:relative;overflow:hidden;
+  padding:32px 0 28px;margin-bottom:24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+
+.mric-calc .mric-lm-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.mric-calc .mric-lm-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  overflow:hidden;
+}
+.mric-calc .mric-lm-icon img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.mric-calc .mric-lm-title{font-size:15px;font-weight:700;color:#fff;line-height:1.3}
+.mric-calc .mric-lm-title span{color:var(--teal)}
+.mric-calc .mric-lm-desc{font-size:13px;line-height:1.6;color:var(--dsub);margin-bottom:16px}
+.mric-calc .mric-lm-desc strong{color:#fff;font-weight:600}
+.mric-calc .mric-lm-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mric-calc .mric-lm-row iframe{max-width:100%}
+.mric-calc .mric-lm-fine{font-size:10px;color:#fff;margin-top:12px;letter-spacing:.02em}
+
+/* ===== Guides internes ===== */
+.mric-calc .mric-guides{padding:28px 0 0;border-top:1px solid rgba(255,255,255,0.06);overflow:hidden}
+.mric-calc .mric-guides-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.mric-calc .mric-guides-logo{height:18px;width:auto}
+.mric-calc .mric-guides-title{font-size:13px;font-weight:700;color:#fff;letter-spacing:.01em}
+.mric-calc .mric-guides-grid{display:grid;grid-template-columns:1fr;gap:6px}
+.mric-calc .mric-guide-link{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none;transition:all .2s ease}
+.mric-calc .mric-guide-link:hover .mric-guide-txt strong{color:var(--teal)}
+.mric-calc .mric-guide-icon{flex-shrink:0;width:20px;height:20px;color:var(--teal)}
+.mric-calc .mric-guide-txt{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
+.mric-calc .mric-guide-txt strong{font-size:13px;font-weight:600;color:#fff;line-height:1.3}
+.mric-calc .mric-guide-txt span{font-size:11px;color:#fff}
+.mric-calc .mric-guide-link svg.mric-guide-chevron{flex-shrink:0;color:#fff;transition:all .2s}
+.mric-calc .mric-guide-link:hover svg.mric-guide-chevron{color:var(--teal);transform:translateX(2px)}
+
+/* ===== Nos autres calculateurs ===== */
+.mric-calc .mric-othercalc{
+  margin-top:28px;padding:20px;border-radius:14px;
+  background:rgba(0,245,192,0.04);border:1px solid rgba(0,245,192,0.10);
+  position:relative;overflow:hidden;
+}
+.mric-calc .mric-othercalc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--blue));
+}
+.mric-calc .mric-othercalc-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+.mric-calc .mric-othercalc-grid{display:grid;grid-template-columns:1fr;gap:0}
+.mric-calc .mric-othercalc-item{
+  display:flex;align-items:center;gap:12px;padding:10px 0;
+  text-decoration:none;transition:all .2s ease;
+  border-bottom:1px solid rgba(0,245,192,0.06);
+}
+.mric-calc .mric-othercalc-item:last-child{border-bottom:none;padding-bottom:0}
+.mric-calc .mric-othercalc-item:first-child{padding-top:0}
+.mric-calc .mric-othercalc-item:hover .mric-othercalc-name{color:var(--teal)}
+.mric-calc .mric-othercalc-name{font-size:13px;font-weight:600;color:#EFF4FF;flex:1;line-height:1.3;transition:color .2s}
+.mric-calc .mric-othercalc-desc{font-size:11px;color:rgba(210,225,240,0.85);display:none}
+.mric-calc .mric-othercalc-item svg{flex-shrink:0;width:14px;height:14px;color:rgba(210,225,240,0.7);transition:all .2s}
+.mric-calc .mric-othercalc-item:hover svg{color:var(--teal);transform:translateX(2px)}
+@media(min-width:640px){
+  .mric-calc .mric-othercalc-grid{grid-template-columns:1fr 1fr 1fr;gap:0}
+  .mric-calc .mric-othercalc-item{border-bottom:none;padding:0 12px;border-right:1px solid rgba(0,245,192,0.08)}
+  .mric-calc .mric-othercalc-item:last-child{border-right:none;padding-right:0}
+  .mric-calc .mric-othercalc-item:first-child{padding-left:0}
+  .mric-calc .mric-othercalc-desc{display:block}
+}
+
+/* ===== Share buttons ===== */
+.mric-calc .mric-share{padding:24px 0;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:8px}
+.mric-calc .mric-share-lbl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+.mric-calc .mric-share-row{display:flex;gap:10px;flex-wrap:wrap}
+.mric-calc .mric-share-btn{
+  width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,0.10);
+  background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;color:#fff;padding:0;
+}
+.mric-calc .mric-share-btn:hover{
+  border-color:rgba(0,245,192,0.3);color:var(--teal);background:rgba(0,245,192,0.08);
+  box-shadow:0 0 20px rgba(0,245,192,0.1);transform:translateY(-2px);
+}
+.mric-calc .mric-share-btn svg{width:18px;height:18px;fill:currentColor}
+.mric-calc .mric-share-btn--copy{width:auto;padding:0 16px;gap:8px;font-size:12px;font-weight:600}
+.mric-calc .mric-share-btn--copy svg{width:16px;height:16px}
+.mric-calc .mric-share-toast{
+  position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);
+  font-size:11px;font-weight:600;color:var(--teal);white-space:nowrap;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.mric-calc .mric-share-toast.mric-show{opacity:1}
+.mric-calc .mric-share-native{
+  display:none;width:auto;padding:0 20px;gap:8px;
+  font-size:13px;font-weight:700;color:#fff;
+  background:rgba(0,245,192,0.12);border:1px solid rgba(0,245,192,0.25);
+}
+.mric-calc .mric-share-native:hover{background:rgba(0,245,192,0.2)}
+@media(max-width:600px){
+  .mric-calc .mric-share-native.mric-has-api{display:flex}
+  .mric-calc .mric-share-row.mric-has-native{display:none}
+}
+
+/* ===== Animations ===== */
+@keyframes mric-fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.mric-calc .mric-anim{animation:mric-fadeUp .5s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
+.mric-calc .mric-anim-d1{animation-delay:.1s}
+.mric-calc .mric-anim-d2{animation-delay:.2s}
+.mric-calc .mric-anim-d3{animation-delay:.3s}
+.mric-calc .mric-anim-d4{animation-delay:.4s}
+
+/* Scroll reveal for sections */
+.mric-calc section .inn>*,.mric-calc section .inn-wide>*{
+  opacity:0;transform:translateY(16px);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+}
+.mric-calc section.mric-visible .inn>*,.mric-calc section.mric-visible .inn-wide>*{
+  opacity:1;transform:translateY(0);
+}
+.mric-calc section.mric-visible .inn>*:nth-child(2){transition-delay:.08s}
+.mric-calc section.mric-visible .inn>*:nth-child(3){transition-delay:.16s}
+.mric-calc section.mric-visible .inn>*:nth-child(4){transition-delay:.24s}
+.mric-calc section.mric-visible .inn>*:nth-child(5){transition-delay:.32s}
+
+/* ===== RESPONSIVE ===== */
+@media(min-width:961px){
+  .mric-calc .mric-tool-grid{display:grid;grid-template-columns:400px 1fr;gap:36px;align-items:start}
+  .mric-calc .mric-form-col{position:sticky;top:24px;margin-bottom:0}
+  .mric-calc .mric-stats-row{grid-template-columns:1fr 1fr 1fr}
+  .mric-calc .srow{grid-template-columns:repeat(3,1fr)}
+  .mric-calc .mric-guides-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:360px){
+  .mric-calc .mric-form-grid{grid-template-columns:1fr}
+  .mric-calc .mric-hero h1{font-size:24px}
+  .mric-calc .stitle{font-size:22px}
+  .mric-calc .mric-mode-btn{font-size:10px;padding:10px 8px}
+}
+</style>
+
+<div class="mric-calc" data-share-url="https://moneyradar.org/calculateur-objectif-financier/">
+
+  <!-- ===== HERO ===== -->
+  <section class="mric-hero">
+    <div class="inn">
+      <img src="https://moneyradar.org/lp4/wp-content/themes/astra-child/assets/images/moneyradar-logo.webp" alt="MoneyRadar" class="mric-hero-logo">
+      <h1>Combien investir pour atteindre <em>votre objectif</em> ?</h1>
+      <p class="mric-hero-sub">Calculez le montant mensuel nécessaire ou le temps qu'il vous faudra pour atteindre votre objectif financier grâce aux intérêts composés.</p>
+    </div>
+  </section>
+
+  <!-- ===== OUTIL : 2 COLONNES ===== -->
+  <section class="dk mric-tool-section">
+    <div class="inn-wide">
+      <div class="mric-tool-grid">
+
+        <!-- COL GAUCHE : Formulaire -->
+        <div class="mric-form-col">
+          <!-- Mode switcher -->
+          <div class="mric-mode-switch">
+            <button class="mric-mode-btn mric-active" data-mode="mensualite" type="button">Combien par mois ?</button>
+            <button class="mric-mode-btn" data-mode="duree" type="button">Quand j'atteins mon objectif ?</button>
+          </div>
+
+          <span class="lbl">Paramètres</span>
+
+          <!-- Presets -->
+          <div class="mric-presets">
+            <button class="mric-preset" data-val="100000" type="button">100 000 &euro;</button>
+            <button class="mric-preset" data-val="500000" type="button">500 000 &euro;</button>
+            <button class="mric-preset" data-val="1000000" type="button">1 000 000 &euro;</button>
+          </div>
+
+          <div class="mric-form-grid">
+            <div class="mric-field">
+              <label for="mric-objectif">Objectif financier</label>
+              <div class="mric-input-wrap">
+                <input type="number" id="mric-objectif" value="100000" min="1" step="1000" inputmode="numeric">
+                <span class="mric-input-suffix">&euro;</span>
+              </div>
+            </div>
+            <div class="mric-field">
+              <label for="mric-capital">Capital actuel</label>
+              <div class="mric-input-wrap">
+                <input type="number" id="mric-capital" value="10000" min="0" step="1000" inputmode="numeric">
+                <span class="mric-input-suffix">&euro;</span>
+              </div>
+            </div>
+            <div class="mric-field" id="mric-field-duree">
+              <label for="mric-duree">Horizon de placement</label>
+              <div class="mric-input-wrap">
+                <input type="number" id="mric-duree" value="15" min="1" max="100" step="1" inputmode="numeric">
+                <span class="mric-input-suffix">ans</span>
+              </div>
+            </div>
+            <div class="mric-field mric-field-hidden" id="mric-field-mensualite">
+              <label for="mric-mensualite">Investissement mensuel</label>
+              <div class="mric-input-wrap">
+                <input type="number" id="mric-mensualite" value="300" min="0" step="10" inputmode="numeric">
+                <span class="mric-input-suffix">&euro;</span>
+              </div>
+            </div>
+            <div class="mric-field">
+              <label for="mric-rendement">Rendement annuel</label>
+              <div class="mric-input-wrap">
+                <input type="number" id="mric-rendement" value="7" min="0" max="50" step="0.1" inputmode="decimal">
+                <span class="mric-input-suffix">%</span>
+              </div>
+            </div>
+          </div>
+          <button class="mric-btn" id="mric-btn-calculer" type="button">
+            Calculer
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+
+        <!-- COL DROITE : Résultats -->
+        <div class="mric-results-col">
+          <div class="mric-results" id="mric-results">
+
+            <!-- 3 stats -->
+            <div class="mric-stats-row">
+              <div class="mric-stat mric-primary mric-anim">
+                <div class="mric-stat-num" id="mric-stat-main">—</div>
+                <div class="mric-stat-lbl" id="mric-stat-main-lbl">Mensualité requise</div>
+              </div>
+              <div class="mric-stat mric-anim mric-anim-d1">
+                <div class="mric-stat-num mric-white" id="mric-stat-verse">—</div>
+                <div class="mric-stat-lbl">Total versé</div>
+              </div>
+              <div class="mric-stat mric-anim mric-anim-d2">
+                <div class="mric-stat-num" id="mric-stat-interets">—</div>
+                <div class="mric-stat-lbl">Intérêts générés</div>
+              </div>
+            </div>
+
+            <!-- Bar -->
+            <div class="mric-bar-section mric-anim mric-anim-d2">
+              <div class="mric-bar-track">
+                <div class="mric-bar-fill mric-bar-v" id="mric-bar-v" style="width:0"><span class="mric-bar-pct" id="mric-pct-v"></span></div>
+                <div class="mric-bar-fill mric-bar-i" id="mric-bar-i" style="width:0"><span class="mric-bar-pct" id="mric-pct-i"></span></div>
+              </div>
+              <div class="mric-bar-legend">
+                <div class="mric-bar-legend-item"><span class="mric-ldot mric-ldot-v"></span><span>Versé</span> <strong id="mric-legend-v">—</strong></div>
+                <div class="mric-bar-legend-item"><span class="mric-ldot mric-ldot-i"></span><span>Intérêts</span> <strong id="mric-legend-i">—</strong></div>
+              </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="mric-chart-wrap mric-anim mric-anim-d3">
+              <div class="mric-chart-header">
+                <span class="mric-chart-title">Progression vers l'objectif</span>
+                <button class="mric-toggle" id="mric-toggle-table" type="button">
+                  <span>Tableau</span>
+                  <svg class="mric-chevron" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <canvas id="mric-chart" height="180"></canvas>
+            </div>
+
+            <!-- Summary -->
+            <div class="qblock mric-anim mric-anim-d4" id="mric-summary"></div>
+
+            <!-- Share buttons -->
+            <div class="mric-share mric-anim mric-anim-d4" id="mric-share">
+              <div class="mric-share-lbl">Partager ce simulateur</div>
+              <button class="mric-share-btn mric-share-native" id="mric-share-native" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="fill:none"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                Partager
+              </button>
+              <div class="mric-share-row" id="mric-share-row">
+                <button class="mric-share-btn mric-share-btn--copy" data-platform="copy" type="button" title="Copier le lien">
+                  <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  Copier
+                  <span class="mric-share-toast" id="mric-toast">Copié !</span>
+                </button>
+                <button class="mric-share-btn" data-platform="twitter" type="button" title="Partager sur X / Twitter">
+                  <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </button>
+                <button class="mric-share-btn" data-platform="facebook" type="button" title="Partager sur Facebook">
+                  <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </button>
+                <button class="mric-share-btn" data-platform="whatsapp" type="button" title="Partager sur WhatsApp">
+                  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </button>
+                <button class="mric-share-btn" data-platform="linkedin" type="button" title="Partager sur LinkedIn">
+                  <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </button>
+                <button class="mric-share-btn" data-platform="telegram" type="button" title="Partager sur Telegram">
+                  <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                </button>
+                <button class="mric-share-btn" data-platform="email" type="button" title="Envoyer par email">
+                  <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Lead Magnet -->
+            <div class="mric-lm mric-anim mric-anim-d4">
+              <div class="mric-lm-head">
+                <div class="mric-lm-icon"><img src="https://moneyradar.org/wp-content/uploads/2026/03/Capture-decran-2026-03-06-a-11.01.24.png" alt="Masterclass investissement"></div>
+                <div class="mric-lm-title"><span>Cadeau :</span> votre masterclass investissement offerte</div>
+              </div>
+              <p class="mric-lm-desc">On vous offre <strong>45 min de formation avec un stratégiste macro</strong> pour comprendre les cycles économiques et prendre de meilleures décisions d'investissement. <strong style="color:var(--teal)">+ Le rapport Mégatendances 2026 en bonus.</strong></p>
+              <div class="mric-lm-row">
+                <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+                <iframe src="https://subscribe-forms.beehiiv.com/6b4ebcf6-43b1-46fd-86b1-aca466483c43" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="no" style="width:340px;height:47px;margin:0;border-radius:0;background-color:transparent;box-shadow:none;max-width:100%;"></iframe>
+              </div>
+              <p class="mric-lm-fine">100% gratuit · Vos données restent privées · Désabonnement en 1 clic</p>
+            </div>
+
+            <!-- Guides -->
+            <div class="mric-guides mric-anim mric-anim-d4">
+              <div class="mric-guides-head"><img src="https://moneyradar.org/lp4/wp-content/themes/astra-child/assets/images/moneyradar-logo.webp" alt="MoneyRadar" class="mric-guides-logo"><div class="mric-guides-title">Nos guides pour bien investir</div></div>
+              <div class="mric-guides-grid">
+                <a href="https://moneyradar.org/bourse/pea/meilleur-pea/" class="mric-guide-link" target="_blank" rel="noopener">
+                  <svg class="mric-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                  <span class="mric-guide-txt"><strong>Meilleur PEA</strong><span>Comparatif des meilleurs PEA</span></span>
+                  <svg class="mric-guide-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="https://moneyradar.org/assurance-vie/meilleure-assurance-vie/" class="mric-guide-link" target="_blank" rel="noopener">
+                  <svg class="mric-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span class="mric-guide-txt"><strong>Meilleure assurance vie</strong><span>Comparatif des meilleurs contrats</span></span>
+                  <svg class="mric-guide-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="https://moneyradar.org/dans-quoi-investir/" class="mric-guide-link" target="_blank" rel="noopener">
+                  <svg class="mric-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                  <span class="mric-guide-txt"><strong>Dans quoi investir</strong><span>Guide complet pour placer son argent</span></span>
+                  <svg class="mric-guide-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="https://moneyradar.org/bourse/meilleur-broker/" class="mric-guide-link" target="_blank" rel="noopener">
+                  <svg class="mric-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                  <span class="mric-guide-txt"><strong>Meilleur broker</strong><span>Comparatif des meilleurs courtiers</span></span>
+                  <svg class="mric-guide-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="https://moneyradar.org/bourse/compte-titres/" class="mric-guide-link" target="_blank" rel="noopener">
+                  <svg class="mric-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  <span class="mric-guide-txt"><strong>Meilleur compte-titres</strong><span>Comparatif des meilleurs CTO</span></span>
+                  <svg class="mric-guide-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="https://moneyradar.org/guides/dca/" class="mric-guide-link" target="_blank" rel="noopener">
+                  <svg class="mric-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  <span class="mric-guide-txt"><strong>Le DCA expliqué</strong><span>La stratégie des versements réguliers</span></span>
+                  <svg class="mric-guide-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Nos autres calculateurs -->
+            <div class="mric-othercalc mric-anim mric-anim-d4">
+              <div class="mric-othercalc-title">Nos autres calculateurs</div>
+              <div class="mric-othercalc-grid">
+                <a href="#" class="mric-othercalc-item">
+                  <div>
+                    <div class="mric-othercalc-name">Intérêts Composés</div>
+                    <div class="mric-othercalc-desc">Simulez la croissance de votre épargne</div>
+                  </div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="#" class="mric-othercalc-item">
+                  <div>
+                    <div class="mric-othercalc-name">Inflation vs Investissement</div>
+                    <div class="mric-othercalc-desc">Simulez l'érosion de votre épargne</div>
+                  </div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="#" class="mric-othercalc-item">
+                  <div>
+                    <div class="mric-othercalc-name">Liberté Financière</div>
+                    <div class="mric-othercalc-desc">Quand pourrez-vous vivre de vos placements</div>
+                  </div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Table full width below -->
+    <div class="mric-table-full">
+      <div class="mric-table-container" id="mric-table-container" style="max-width:1100px;margin:0 auto">
+        <div class="mric-table-scroll">
+          <table class="mric-table">
+            <thead><tr><th>Année</th><th>Versements cumulés</th><th>Intérêts cumulés</th><th>Capital total</th></tr></thead>
+            <tbody id="mric-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ÉDUCATIF : POURQUOI SE FIXER UN OBJECTIF ===== -->
+  <section class="lt">
+    <div class="inn">
+      <h2 class="stitle">Pourquoi se fixer un objectif financier ?</h2>
+      <p class="btxt">Investir sans objectif, c'est naviguer sans destination. Se fixer un cap financier précis transforme l'investissement en un plan d'action concret. Vous savez exactement combien mettre de côté, pendant combien de temps, et vous pouvez mesurer votre progression.</p>
+      <p class="btxt">Un objectif chiffré rend vos choix plus rationnels : vous évitez de paniquer en cas de baisse temporaire, et vous restez motivé parce que vous voyez le chemin parcouru. <strong>C'est la différence entre espérer et planifier.</strong></p>
+    </div>
+  </section>
+
+  <!-- ===== L'EFFORT MENSUEL SELON L'OBJECTIF ===== -->
+  <section class="dk">
+    <div class="inn">
+      <h2 class="stitle">L'effort mensuel selon votre objectif</h2>
+      <p class="btxt">Voici le montant mensuel approximatif nécessaire pour atteindre différents objectifs en partant de zéro, avec un rendement de 7 % par an sur 20 ans :</p>
+      <div class="srow">
+        <div class="scard"><div class="num">192 &euro;/mois</div><div class="lbl2">Pour atteindre<br><strong style="color:#fff">100 000 &euro;</strong></div></div>
+        <div class="scard"><div class="num">960 &euro;/mois</div><div class="lbl2">Pour atteindre<br><strong style="color:#fff">500 000 &euro;</strong></div></div>
+        <div class="scard"><div class="num">1 920 &euro;/mois</div><div class="lbl2">Pour atteindre<br><strong style="color:#fff">1 000 000 &euro;</strong></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FORMULES ===== -->
+  <section class="lt">
+    <div class="inn">
+      <h2 class="stitle">Les formules utilisées</h2>
+      <p class="btxt">Ce simulateur utilise les mathématiques financières classiques des intérêts composés avec versements réguliers.</p>
+      <div class="mric-formula" style="background:var(--lt)">
+        <p><strong>Mode 1 : mensualité requise</strong></p>
+        <p>M = (Objectif &minus; Capital &times; (1+i)<sup>n</sup>) / [((1+i)<sup>n</sup> &minus; 1) / i]</p>
+        <ul>
+          <li><strong>i</strong> = taux mensuel = rendement annuel / 12 / 100</li>
+          <li><strong>n</strong> = nombre de mois = durée &times; 12</li>
+          <li><strong>M</strong> = versement mensuel nécessaire</li>
+        </ul>
+      </div>
+      <div class="mric-formula" style="background:var(--lt)">
+        <p><strong>Mode 2 : temps nécessaire</strong></p>
+        <p>Simulation mois par mois jusqu'à atteindre l'objectif :</p>
+        <ul>
+          <li><strong>Capital</strong> = Capital &times; (1+i) + Mensualité</li>
+          <li>Répété chaque mois jusqu'à <strong>Capital &ge; Objectif</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LE TEMPS EST VOTRE MEILLEUR ALLIÉ ===== -->
+  <section class="dk">
+    <div class="inn">
+      <h2 class="stitle">Le temps est votre meilleur allié</h2>
+      <p class="btxt">Plus vous commencez tôt, moins l'effort mensuel est important. L'effet des intérêts composés fait une différence considérable sur le long terme. Voici ce qu'il faut investir par mois pour atteindre 100 000 € à 7 % de rendement :</p>
+      <div class="cgrid">
+        <div class="card"><div class="cnum" style="color:#00F5C0">10</div><div><h3>10 ans : 575 €/mois</h3><p>L'effort est significatif mais réalisable. Les intérêts représentent environ 31 % du total final.</p></div></div>
+        <div class="card"><div class="cnum" style="color:#00F5C0">20</div><div><h3>20 ans : 192 €/mois</h3><p>3 fois moins que sur 10 ans. Les intérêts composés financent plus de la moitié de l'objectif.</p></div></div>
+        <div class="card"><div class="cnum" style="color:#00F5C0">30</div><div><h3>30 ans : 82 €/mois</h3><p>Un effort minimal. Plus de 70 % du capital final provient des intérêts composés.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ERREURS COURANTES ===== -->
+  <section class="lt">
+    <div class="inn">
+      <h2 class="stitle">Les erreurs à éviter</h2>
+      <p class="btxt">Atteindre un objectif financier demande de la discipline et une bonne stratégie. Voici les pièges les plus courants :</p>
+      <div class="cgrid">
+        <div class="card">
+          <div class="cnum">1</div>
+          <div>
+            <h3>Se fixer un objectif irréaliste</h3>
+            <p>Un objectif trop ambitieux par rapport à vos revenus mène au découragement. Mieux vaut un objectif atteignable que vous augmenterez au fil du temps.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="cnum">2</div>
+          <div>
+            <h3>Attendre le « bon moment »</h3>
+            <p>Chaque mois d'attente est un mois sans intérêts composés. Le meilleur moment pour commencer, c'est maintenant.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="cnum">3</div>
+          <div>
+            <h3>Interrompre ses versements</h3>
+            <p>La régularité est la clé des intérêts composés. Même un petit montant mensuel constant vaut mieux que des versements irréguliers plus importants.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="dk">
+    <div class="inn">
+      <h2 class="stitle">Questions fréquentes</h2>
+      <div class="flist">
+        <details>
+          <summary>Quel rendement utiliser pour ma simulation ?</summary>
+          <div class="fans">Un rendement de 7 à 8 % par an correspond à la performance historique moyenne des marchés actions mondiaux sur le long terme (avant inflation). Pour une approche plus prudente, utilisez 5 à 6 %. Pour un livret d'épargne, 2 à 3 %.</div>
+        </details>
+        <details>
+          <summary>Ce simulateur tient-il compte de l'inflation ?</summary>
+          <div class="fans">Non, les montants sont exprimés en euros actuels. Pour tenir compte de l'inflation, vous pouvez réduire le rendement de 2 à 3 points. Par exemple, 7 % de rendement nominal avec 2 % d'inflation donne environ 5 % de rendement réel.</div>
+        </details>
+        <details>
+          <summary>Et les impôts ?</summary>
+          <div class="fans">Ce simulateur montre les rendements bruts. En France, les plus-values sont soumises au PFU de 30 %. Les enveloppes fiscales (PEA, assurance vie) permettent de réduire fortement cet impact. Un PEA après 5 ans ne subit que 17,2 % de prélèvements sociaux.</div>
+        </details>
+        <details>
+          <summary>Puis-je vraiment atteindre 1 000 000 € ?</summary>
+          <div class="fans">Oui, c'est mathématiquement possible avec suffisamment de temps et de régularité. Avec 500 €/mois à 8 % pendant 30 ans, vous dépasserez le million. La clé : commencer tôt, rester régulier, et laisser le temps faire son travail.</div>
+        </details>
+        <details>
+          <summary>Que se passe-t-il si le rendement varie d'une année à l'autre ?</summary>
+          <div class="fans">Les marchés fluctuent, mais sur 15 à 20 ans, la moyenne tend à se lisser. Ce simulateur utilise un rendement constant pour simplifier la projection. En pratique, votre capital réel peut être au-dessus ou en dessous de la projection selon les années.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+(function(){
+  'use strict';
+
+  var currentMode='mensualite';
+
+  // DOM
+  var modeBtns=document.querySelectorAll('.mric-calc .mric-mode-btn');
+  var fieldDuree=document.getElementById('mric-field-duree');
+  var fieldMensualite=document.getElementById('mric-field-mensualite');
+  var btnCalculer=document.getElementById('mric-btn-calculer');
+  var resultsSection=document.getElementById('mric-results');
+  var statMain=document.getElementById('mric-stat-main');
+  var statMainLbl=document.getElementById('mric-stat-main-lbl');
+  var statVerse=document.getElementById('mric-stat-verse');
+  var statInterets=document.getElementById('mric-stat-interets');
+  var summaryEl=document.getElementById('mric-summary');
+  var tableBody=document.getElementById('mric-table-body');
+  var toggleBtn=document.getElementById('mric-toggle-table');
+  var tableContainer=document.getElementById('mric-table-container');
+  var barV=document.getElementById('mric-bar-v');
+  var barI=document.getElementById('mric-bar-i');
+  var pctV=document.getElementById('mric-pct-v');
+  var pctI=document.getElementById('mric-pct-i');
+  var legendV=document.getElementById('mric-legend-v');
+  var legendI=document.getElementById('mric-legend-i');
+  var chartCanvas=document.getElementById('mric-chart');
+  var presetBtns=document.querySelectorAll('.mric-calc .mric-preset');
+  var objectifInput=document.getElementById('mric-objectif');
+
+  function formatEuro(n){
+    return n.toLocaleString('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:0,maximumFractionDigits:0});
+  }
+  function formatEuro2(n){
+    return n.toLocaleString('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  function formatCompact(n){
+    if(n>=1e6)return(n/1e6).toFixed(1).replace('.',',')+' M\u20AC';
+    if(n>=1e3)return(n/1e3).toFixed(0)+' k\u20AC';
+    return n.toFixed(0)+' \u20AC';
+  }
+
+  // Mode switching
+  modeBtns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      modeBtns.forEach(function(b){b.classList.remove('mric-active')});
+      btn.classList.add('mric-active');
+      currentMode=btn.getAttribute('data-mode');
+      if(currentMode==='mensualite'){
+        fieldDuree.classList.remove('mric-field-hidden');
+        fieldMensualite.classList.add('mric-field-hidden');
+      } else {
+        fieldDuree.classList.add('mric-field-hidden');
+        fieldMensualite.classList.remove('mric-field-hidden');
+      }
+      calculer();
+    });
+  });
+
+  // Presets
+  presetBtns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      presetBtns.forEach(function(b){b.classList.remove('mric-active')});
+      btn.classList.add('mric-active');
+      objectifInput.value=btn.getAttribute('data-val');
+      calculer();
+    });
+  });
+
+  function drawChart(data,objectif){
+    var ctx=chartCanvas.getContext('2d');
+    var dpr=window.devicePixelRatio||1;
+    var rect=chartCanvas.getBoundingClientRect();
+    var h=180;
+    chartCanvas.width=rect.width*dpr;
+    chartCanvas.height=h*dpr;
+    ctx.scale(dpr,dpr);
+    var w=rect.width;
+    var pT=20,pB=28,pL=54,pR=14;
+    var pW=w-pL-pR,pH=h-pT-pB;
+    ctx.clearRect(0,0,w,h);
+    if(!data.length)return;
+
+    var max=Math.max(data[data.length-1].solde,objectif)*1.05;
+    var sX=pW/(data.length-1||1);
+
+    // Grid
+    ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+    for(var g=0;g<=4;g++){
+      var gy=pT+(pH/4)*g;
+      ctx.beginPath();ctx.moveTo(pL,gy);ctx.lineTo(w-pR,gy);ctx.stroke();
+      ctx.fillStyle='#fff';ctx.textAlign='right';ctx.textBaseline='middle';
+      ctx.font='11px sans-serif';
+      ctx.fillText(formatCompact(max-(max/4)*g),pL-8,gy);
+    }
+
+    // Objective line
+    var objY=pT+pH-(objectif/max)*pH;
+    ctx.setLineDash([6,4]);
+    ctx.strokeStyle='rgba(0,245,192,0.35)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pL,objY);ctx.lineTo(w-pR,objY);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#00F5C0';ctx.textAlign='left';ctx.font='10px sans-serif';
+    ctx.fillText('Objectif',pL+4,objY-6);
+
+    // Versements area
+    ctx.beginPath();ctx.moveTo(pL,pT+pH);
+    for(var v=0;v<data.length;v++){ctx.lineTo(pL+v*sX,pT+pH-(data[v].versementsCumules/max)*pH)}
+    ctx.lineTo(pL+(data.length-1)*sX,pT+pH);ctx.closePath();
+    ctx.fillStyle='rgba(26,40,71,0.8)';ctx.fill();
+
+    // Total area
+    var grad=ctx.createLinearGradient(0,pT,0,pT+pH);
+    grad.addColorStop(0,'rgba(0,245,192,0.18)');grad.addColorStop(1,'rgba(0,245,192,0.01)');
+    ctx.beginPath();ctx.moveTo(pL,pT+pH);
+    for(var t=0;t<data.length;t++){ctx.lineTo(pL+t*sX,pT+pH-(data[t].solde/max)*pH)}
+    ctx.lineTo(pL+(data.length-1)*sX,pT+pH);ctx.closePath();
+    ctx.fillStyle=grad;ctx.fill();
+
+    // Total line
+    var lGrad=ctx.createLinearGradient(pL,0,w-pR,0);
+    lGrad.addColorStop(0,'#00F5C0');lGrad.addColorStop(1,'#1060C4');
+    ctx.beginPath();
+    for(var l=0;l<data.length;l++){
+      var lx=pL+l*sX,ly=pT+pH-(data[l].solde/max)*pH;
+      l===0?ctx.moveTo(lx,ly):ctx.lineTo(lx,ly);
+    }
+    ctx.strokeStyle=lGrad;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.stroke();
+
+    // Dots
+    var di=Math.max(1,Math.floor(data.length/8));
+    for(var d=0;d<data.length;d++){
+      if(d%di!==0&&d!==data.length-1)continue;
+      var dx=pL+d*sX,dy=pT+pH-(data[d].solde/max)*pH;
+      ctx.beginPath();ctx.arc(dx,dy,3.5,0,Math.PI*2);
+      ctx.fillStyle='#00F5C0';ctx.fill();
+      ctx.strokeStyle='rgba(0,245,192,0.2)';ctx.lineWidth=5;ctx.stroke();
+    }
+
+    // X labels
+    ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='top';
+    ctx.font='10px sans-serif';
+    var xi=Math.max(1,Math.floor(data.length/6));
+    for(var x=0;x<data.length;x++){
+      if(x%xi!==0&&x!==data.length-1)continue;
+      ctx.fillText('An '+data[x].annee,pL+x*sX,h-pB+8);
+    }
+  }
+
+  function calculer(){
+    var objectif=parseFloat(objectifInput.value)||0;
+    var capital=parseFloat(document.getElementById('mric-capital').value)||0;
+    var rendement=parseFloat(document.getElementById('mric-rendement').value)||0;
+
+    if(objectif<=0)return;
+
+    var i=rendement/12/100;
+
+    if(currentMode==='mensualite'){
+      var duree=parseInt(document.getElementById('mric-duree').value,10)||0;
+      if(duree<=0)return;
+      var n=duree*12;
+
+      var mensualite;
+      if(capital>=objectif){
+        mensualite=0;
+      } else if(i===0){
+        mensualite=(objectif-capital)/n;
+      } else {
+        var fv_capital=capital*Math.pow(1+i,n);
+        var reste=objectif-fv_capital;
+        if(reste<=0){
+          mensualite=0;
+        } else {
+          mensualite=reste/((Math.pow(1+i,n)-1)/i);
+        }
+      }
+      if(mensualite<0)mensualite=0;
+
+      var totalVerse=capital+mensualite*n;
+      var capitalFinal=objectif;
+      var interets=capitalFinal-totalVerse;
+      if(interets<0)interets=0;
+
+      statMain.textContent=formatEuro2(mensualite)+'/mois';
+      statMainLbl.textContent='Mensualité requise';
+      statVerse.textContent=formatEuro(totalVerse);
+      statInterets.textContent=formatEuro(interets);
+
+      // Bar
+      var pV=capitalFinal>0?(totalVerse/capitalFinal*100):50;
+      var pI=capitalFinal>0?(interets/capitalFinal*100):50;
+      barV.style.width=pV.toFixed(1)+'%';
+      barI.style.width=pI.toFixed(1)+'%';
+      pctV.textContent=pV.toFixed(0)+'%';
+      pctI.textContent=pI.toFixed(0)+'%';
+      legendV.textContent=formatEuro(totalVerse);
+      legendI.textContent=formatEuro(interets);
+
+      // Summary
+      if(mensualite===0){
+        summaryEl.innerHTML='Votre capital actuel de <strong>'+formatEuro(capital)+'</strong> suffit déjà à atteindre votre objectif de <strong>'+formatEuro(objectif)+'</strong> en <strong>'+duree+' an'+(duree>1?'s':'')+'</strong> à <strong>'+rendement.toFixed(1).replace('.',',')+' %</strong> de rendement annuel. Vous n\'avez pas besoin d\'investir davantage chaque mois.';
+      } else {
+        var pctInterets=totalVerse>0?((interets/capitalFinal)*100).toFixed(0):0;
+        summaryEl.innerHTML='Pour atteindre <strong>'+formatEuro(objectif)+'</strong> en <strong>'+duree+' an'+(duree>1?'s':'')+'</strong> avec un rendement de <strong>'+rendement.toFixed(1).replace('.',',')+' %</strong>, vous devriez investir environ <strong>'+formatEuro2(mensualite)+'</strong> par mois. Sur le capital final, <strong>'+pctInterets+' %</strong> proviendront des intérêts composés.';
+      }
+
+      // Table
+      tableBody.innerHTML='';
+      var solde=capital,yearlyData=[{annee:0,versementsCumules:capital,interetsCumules:0,solde:capital}];
+      for(var a=1;a<=duree;a++){
+        for(var m=0;m<12;m++){solde=solde*(1+i)+mensualite}
+        var vc=capital+mensualite*a*12;
+        var ic=solde-vc;
+        yearlyData.push({annee:a,versementsCumules:vc,interetsCumules:ic,solde:solde});
+        var tr=document.createElement('tr');
+        tr.innerHTML='<td>'+a+'</td><td>'+formatEuro(vc)+'</td><td>'+formatEuro(ic)+'</td><td>'+formatEuro(solde)+'</td>';
+        tableBody.appendChild(tr);
+      }
+
+      resultsSection.classList.add('mric-visible');
+      var anims=resultsSection.querySelectorAll('.mric-anim');
+      anims.forEach(function(el){el.style.animation='none';el.offsetHeight;el.style.animation=''});
+      setTimeout(function(){drawChart(yearlyData,objectif)},250);
+
+    } else {
+      // Mode durée
+      var mensualiteSaisie=parseFloat(document.getElementById('mric-mensualite').value)||0;
+
+      if(capital>=objectif){
+        statMain.textContent='Déjà atteint !';
+        statMainLbl.textContent='Temps nécessaire';
+        statVerse.textContent=formatEuro(capital);
+        statInterets.textContent=formatEuro(0);
+        barV.style.width='100%';barI.style.width='0%';
+        pctV.textContent='100%';pctI.textContent='0%';
+        legendV.textContent=formatEuro(capital);legendI.textContent=formatEuro(0);
+        summaryEl.innerHTML='Votre capital actuel de <strong>'+formatEuro(capital)+'</strong> dépasse déjà votre objectif de <strong>'+formatEuro(objectif)+'</strong>. Vous avez atteint votre objectif !';
+        tableBody.innerHTML='';
+        resultsSection.classList.add('mric-visible');
+        var anims2=resultsSection.querySelectorAll('.mric-anim');
+        anims2.forEach(function(el){el.style.animation='none';el.offsetHeight;el.style.animation=''});
+        setTimeout(function(){drawChart([{annee:0,versementsCumules:capital,interetsCumules:0,solde:capital}],objectif)},250);
+        return;
+      }
+
+      if(mensualiteSaisie<=0&&i===0){
+        summaryEl.innerHTML='Avec un investissement mensuel de <strong>0 €</strong> et un rendement de <strong>0 %</strong>, votre capital ne progressera jamais. Augmentez votre versement mensuel ou votre rendement estimé.';
+        statMain.textContent='Impossible';
+        statMainLbl.textContent='Temps nécessaire';
+        statVerse.textContent='—';statInterets.textContent='—';
+        barV.style.width='50%';barI.style.width='50%';
+        pctV.textContent='—';pctI.textContent='—';
+        legendV.textContent='—';legendI.textContent='—';
+        tableBody.innerHTML='';
+        resultsSection.classList.add('mric-visible');
+        var anims3=resultsSection.querySelectorAll('.mric-anim');
+        anims3.forEach(function(el){el.style.animation='none';el.offsetHeight;el.style.animation=''});
+        return;
+      }
+
+      // Simulate month by month
+      var solde2=capital,mois=0,maxMois=1200; // 100 years max
+      while(solde2<objectif&&mois<maxMois){
+        solde2=solde2*(1+i)+mensualiteSaisie;
+        mois++;
+      }
+
+      if(mois>=maxMois){
+        summaryEl.innerHTML='Avec <strong>'+formatEuro(mensualiteSaisie)+'</strong>/mois à <strong>'+rendement.toFixed(1).replace('.',',')+' %</strong>, l\'objectif de <strong>'+formatEuro(objectif)+'</strong> ne peut pas être atteint en moins de 100 ans. Essayez d\'augmenter votre versement mensuel ou votre rendement.';
+        statMain.textContent='> 100 ans';
+        statMainLbl.textContent='Temps nécessaire';
+        statVerse.textContent='—';statInterets.textContent='—';
+        barV.style.width='50%';barI.style.width='50%';
+        pctV.textContent='—';pctI.textContent='—';
+        legendV.textContent='—';legendI.textContent='—';
+        tableBody.innerHTML='';
+        resultsSection.classList.add('mric-visible');
+        var anims4=resultsSection.querySelectorAll('.mric-anim');
+        anims4.forEach(function(el){el.style.animation='none';el.offsetHeight;el.style.animation=''});
+        return;
+      }
+
+      var annees=Math.floor(mois/12);
+      var moisReste=mois%12;
+      var tempsStr=annees>0?annees+' an'+(annees>1?'s':''):'';
+      if(moisReste>0){
+        if(tempsStr)tempsStr+=' et ';
+        tempsStr+=moisReste+' mois';
+      }
+      if(!tempsStr)tempsStr='moins d\'un mois';
+
+      var dateAtteinte=new Date();
+      dateAtteinte.setMonth(dateAtteinte.getMonth()+mois);
+      var moisNoms=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+      var dateStr=moisNoms[dateAtteinte.getMonth()]+' '+dateAtteinte.getFullYear();
+
+      var totalVerse2=capital+mensualiteSaisie*mois;
+      var interets2=solde2-totalVerse2;
+      if(interets2<0)interets2=0;
+
+      statMain.textContent=tempsStr;
+      statMainLbl.textContent='Temps nécessaire';
+      statVerse.textContent=formatEuro(totalVerse2);
+      statInterets.textContent=formatEuro(interets2);
+
+      var pV2=solde2>0?(totalVerse2/solde2*100):50;
+      var pI2=solde2>0?(interets2/solde2*100):50;
+      barV.style.width=pV2.toFixed(1)+'%';
+      barI.style.width=pI2.toFixed(1)+'%';
+      pctV.textContent=pV2.toFixed(0)+'%';
+      pctI.textContent=pI2.toFixed(0)+'%';
+      legendV.textContent=formatEuro(totalVerse2);
+      legendI.textContent=formatEuro(interets2);
+
+      var pctI2=solde2>0?((interets2/solde2)*100).toFixed(0):0;
+      summaryEl.innerHTML='En investissant <strong>'+formatEuro(mensualiteSaisie)+'</strong> par mois à <strong>'+rendement.toFixed(1).replace('.',',')+' %</strong>, vous pourriez atteindre votre objectif de <strong>'+formatEuro(objectif)+'</strong> en environ <strong>'+tempsStr+'</strong>, soit vers <strong>'+dateStr+'</strong>. Les intérêts composés représenteraient <strong>'+pctI2+' %</strong> du capital final.';
+
+      // Table year by year
+      tableBody.innerHTML='';
+      var solde3=capital,totalAnnees=Math.ceil(mois/12);
+      var yearlyData2=[{annee:0,versementsCumules:capital,interetsCumules:0,solde:capital}];
+      for(var a2=1;a2<=totalAnnees;a2++){
+        var moisCeAn=(a2===totalAnnees&&moisReste>0)?moisReste:12;
+        for(var m2=0;m2<moisCeAn;m2++){solde3=solde3*(1+i)+mensualiteSaisie}
+        var vc2=capital+mensualiteSaisie*((a2-1)*12+moisCeAn);
+        // Fix cumulated versements
+        var totalMoisEcoules=Math.min(a2*12,mois);
+        vc2=capital+mensualiteSaisie*totalMoisEcoules;
+        var ic2=solde3-vc2;
+        yearlyData2.push({annee:a2,versementsCumules:vc2,interetsCumules:ic2,solde:solde3});
+        var tr2=document.createElement('tr');
+        tr2.innerHTML='<td>'+a2+'</td><td>'+formatEuro(vc2)+'</td><td>'+formatEuro(ic2)+'</td><td>'+formatEuro(solde3)+'</td>';
+        tableBody.appendChild(tr2);
+      }
+
+      resultsSection.classList.add('mric-visible');
+      var anims5=resultsSection.querySelectorAll('.mric-anim');
+      anims5.forEach(function(el){el.style.animation='none';el.offsetHeight;el.style.animation=''});
+      setTimeout(function(){drawChart(yearlyData2,objectif)},250);
+    }
+  }
+
+  // ===== Share buttons =====
+  var SHARE_URL=document.querySelector('.mric-calc').getAttribute('data-share-url')||window.location.href;
+  var SHARE_TITLE="Calculateur Objectif Financier — MoneyRadar";
+  var SHARE_TEXT="Calculez combien investir chaque mois pour atteindre votre objectif financier avec ce simulateur gratuit :";
+
+  function copyLink(){
+    var toast=document.getElementById('mric-toast');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(SHARE_URL).then(function(){showToast(toast)}).catch(function(){fallbackCopy(toast)});
+    }else{fallbackCopy(toast)}
+  }
+  function fallbackCopy(toast){
+    var ta=document.createElement('textarea');ta.value=SHARE_URL;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');showToast(toast)}catch(e){}
+    document.body.removeChild(ta);
+  }
+  function showToast(toast){
+    toast.classList.add('mric-show');
+    setTimeout(function(){toast.classList.remove('mric-show')},2000);
+  }
+
+  function shareTo(platform){
+    var u=encodeURIComponent(SHARE_URL);
+    var t=encodeURIComponent(SHARE_TEXT+' '+SHARE_URL);
+    var urls={
+      twitter:'https://twitter.com/intent/tweet?url='+u+'&text='+encodeURIComponent(SHARE_TEXT),
+      facebook:'https://www.facebook.com/sharer/sharer.php?u='+u,
+      whatsapp:'https://wa.me/?text='+t,
+      linkedin:'https://www.linkedin.com/sharing/share-offsite/?url='+u,
+      telegram:'https://t.me/share/url?url='+u+'&text='+encodeURIComponent(SHARE_TEXT),
+      email:'mailto:?subject='+encodeURIComponent(SHARE_TITLE)+'&body='+t
+    };
+    if(urls[platform]){
+      if(platform==='email'){window.location.href=urls[platform]}
+      else{window.open(urls[platform],'_blank','noopener,width=600,height=500')}
+    }
+  }
+
+  function nativeShare(){
+    if(navigator.share){
+      navigator.share({title:SHARE_TITLE,text:SHARE_TEXT,url:SHARE_URL}).catch(function(){});
+    }
+  }
+
+  var nativeBtn=document.getElementById('mric-share-native');
+  var shareRow=document.getElementById('mric-share-row');
+  if(navigator.share){
+    nativeBtn.classList.add('mric-has-api');
+    shareRow.classList.add('mric-has-native');
+  }
+
+  nativeBtn.addEventListener('click',nativeShare);
+  document.querySelectorAll('.mric-share-btn[data-platform]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var p=this.getAttribute('data-platform');
+      if(p==='copy'){copyLink()}else{shareTo(p)}
+    });
+  });
+
+  toggleBtn.addEventListener('click',function(){
+    var open=tableContainer.style.display==='block';
+    tableContainer.style.display=open?'none':'block';
+    toggleBtn.classList.toggle('mric-open',!open);
+    toggleBtn.querySelector('span').textContent=open?'Tableau':'Masquer';
+  });
+
+  var resizeTimer;
+  window.addEventListener('resize',function(){
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(function(){if(resultsSection.classList.contains('mric-visible'))calculer()},200);
+  });
+
+  var sectionObserver=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){entry.target.classList.add('mric-visible')}
+    });
+  },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.mric-calc section').forEach(function(s){sectionObserver.observe(s)});
+
+  btnCalculer.addEventListener('click',calculer);
+  calculer();
+})();
+</script>
